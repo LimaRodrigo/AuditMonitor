@@ -1,0 +1,11 @@
+.audit-monitor-container-main {
+    margin-top: 10px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 75vh;
+}
