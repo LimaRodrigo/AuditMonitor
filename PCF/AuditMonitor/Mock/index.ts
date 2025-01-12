@@ -162,7 +162,7 @@ export const mockAudit: IRetrieveRecordChangeHistoryResponse = {
                     "operation@OData.Community.Display.V1.FormattedValue": "Atualizar",
                     "createdon@OData.Community.Display.V1.FormattedValue": "07/01/2025 15:58",
                     "createdon": "2025-01-07T18:58:30Z",
-                    "auditid": "daedb3fc-9ade-42b3-80c5-45c3e62cefd7",
+                    "auditid": "4d7c2372-3c4c-47d9-ad3e-d4b51158eac0",
                     "_userid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "systemuser",
                     "_userid_value@OData.Community.Display.V1.FormattedValue": "Lima, Rodrigo",
                     "_userid_value": "8be282dd-4634-ef11-a316-6045bd3928d8",
@@ -304,7 +304,7 @@ export const mockAudit: IRetrieveRecordChangeHistoryResponse = {
                     "operation@OData.Community.Display.V1.FormattedValue": "Atualizar",
                     "createdon@OData.Community.Display.V1.FormattedValue": "18/12/2024 10:12",
                     "createdon": "2024-12-18T13:12:54Z",
-                    "auditid": "e0152381-2956-4dbe-b1fc-2f2b3057ddea",
+                    "auditid": "148d5cb4-29cd-4b45-a376-d7a3e47fb408",
                     "_userid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "systemuser",
                     "_userid_value@OData.Community.Display.V1.FormattedValue": "da Costa Lima, Rodrigo",
                     "_userid_value": "8be282dd-4634-ef11-a316-6045bd3928d8"

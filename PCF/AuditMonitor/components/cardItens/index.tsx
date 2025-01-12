@@ -1,19 +1,13 @@
 import * as React from 'react';
 import './style.css';
- import { ArrowRightRegular } from "@fluentui/react-icons";
+ import { ArrowRight16Regular } from "@fluentui/react-icons";
 import { TimelineIten } from '../timelineItens';
 import {
-    Text, Caption1, Subtitle2, Title3, Link, Persona, Popover, PopoverTrigger, PopoverSurface,
+    Text, Link, Popover, PopoverTrigger, PopoverSurface,
     Table,
     TableBody,
     TableCell,
     TableRow,
-    TableHeader,
-    TableHeaderCell,
-    TableCellLayout,
-    Subtitle2Stronger,
-    useFluent,
-    useScrollbarWidth,
     Body1Stronger,
     Caption1Strong,
     Body1Strong,
@@ -86,7 +80,7 @@ export default function CardItens(props: ICardItensProps) {
                                                 <Text>{attribute.oldValue ? attribute.oldValue: "-" }</Text>
                                             </TableCell>
                                             <TableCell>
-                                                <ArrowRightRegular style={{color: "green"}}/>
+                                                <ArrowRight16Regular style={{color: "green"}}/>
                                             </TableCell>
                                             <TableCell>
                                                 <Text>{modifieldData(attribute.newValue)}</Text>

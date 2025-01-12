@@ -13,8 +13,8 @@
     "refreshTypes": "pcf-scripts refreshTypes"
   },
   "dependencies": {
+    "@fluentui/react-components": "^9.46.2",
     "react": "16.14.0",
-    "@fluentui/react-components": "9.46.2",
     "react-dom": "16.14.0"
   },
   "devDependencies": {
@@ -30,6 +30,7 @@
     "pcf-scripts": "^1",
     "pcf-start": "^1",
     "react": "^16.14.0",
+    "sass": "^1.83.1",
     "typescript": "^4.9.5"
   }
 }

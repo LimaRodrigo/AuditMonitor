@@ -21,7 +21,7 @@ export class HelperXrm implements IHelperXrm {
             )
         });
     }
-    async FetchJS(url: string): Promise<object[]> {       
+    async FetchJS(url: string): Promise<object[]> {
         return new Promise((resolve, reject) => {
             fetch(url)
                 .then((response) => {
@@ -45,7 +45,7 @@ export class HelperXrm implements IHelperXrm {
                     logicalName: meta.logicalName,
                     displayName: meta.displayName,
                     oldValue: propsOld.includes(meta.logicalName) ? auditDynamics.OldValue![meta.logicalName] : "",
-                    newValue: propsNew.includes(meta.logicalName)? auditDynamics.NewValue![meta.logicalName] : ""
+                    newValue: propsNew.includes(meta.logicalName) ? auditDynamics.NewValue![meta.logicalName] : ""
                 });
             }
             else if (propsNew.includes(`_${meta.logicalName}_value`)) {
@@ -53,7 +53,7 @@ export class HelperXrm implements IHelperXrm {
                     logicalName: meta.logicalName,
                     displayName: meta.displayName,
                     oldValue: propsOld.includes(`_${meta.logicalName}_value`) ? auditDynamics.OldValue![`_${meta.logicalName}_value@OData.Community.Display.V1.FormattedValue`] : "",
-                    newValue: propsNew.includes(`_${meta.logicalName}_value`)? auditDynamics.NewValue![`_${meta.logicalName}_value@OData.Community.Display.V1.FormattedValue`] : ""
+                    newValue: propsNew.includes(`_${meta.logicalName}_value`) ? auditDynamics.NewValue![`_${meta.logicalName}_value@OData.Community.Display.V1.FormattedValue`] : ""
                 });
             }
         });
@@ -114,7 +114,10 @@ export class HelperXrm implements IHelperXrm {
         }
         return text.substring(0, maxLength) + '...';
     }
-    groupAuditsByDate(audits: IAudit[]): { [key: string]: IAudit[] } {
+    groupAuditsByDate(audits: IAudit[] | undefined): { [key: string]: IAudit[] } | undefined {
+        if (!audits || audits.length == 0)
+            return undefined;
+
         return audits.reduce((acc, audit) => {
             const dateKey = audit.date.toISOString().split('T')[0]; // Use only the date part
             if (!acc[dateKey]) {

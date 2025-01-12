@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './style.css';
-import { FluentProvider, webLightTheme } from '@fluentui/react-components';
+import { FluentProvider, Input, webLightTheme } from '@fluentui/react-components';
 import { IInputs } from './generated/ManifestTypes';
 import { HelperXrm } from './Helper/Utils';
 import { IAttributesMetadata, IAudit, IAuditDetails, IDataRegister, IEntityDefinitions, IRetrieveRecordChangeHistoryResponse } from './models';
@@ -8,6 +8,7 @@ import { useState } from 'react';
 import CardItens from './components/cardItens';
 import { CardGroups } from './components/cardGroups';
 import { mockMetadata } from './Mock';
+import { SearchSparkle16Filled } from "@fluentui/react-icons";
 
 export interface IMainProps {
   name?: string;
@@ -18,7 +19,8 @@ interface IMainState {
   auditsDynamics?: IRetrieveRecordChangeHistoryResponse;
   metadataAttributes?: IAttributesMetadata[];
   audits?: IAudit[],
-  auditsGroup?: { [key: string]: IAudit[] }
+  auditsGroup?: { [key: string]: IAudit[] } | undefined,
+  txtFilter?: string | undefined
 }
 
 
@@ -51,7 +53,19 @@ export function Main(props: IMainProps) {
     getData();
   }, [props.name]);
 
+  const getItensFilter = (val: string) => {
+    const hpUtil = new HelperXrm(props.context);
+    const auditFilter = state.audits?.filter(x => x.attributes.find(x => x.displayName?.includes(val)));
 
+    console.log("getItensFilter", auditFilter);
+
+    setState({
+      ...state,
+      txtFilter: val,
+      auditsGroup: hpUtil.groupAuditsByDate(auditFilter)
+    })
+
+  }
 
 
   const getDataRegister = (): IDataRegister => {
@@ -89,6 +103,14 @@ export function Main(props: IMainProps) {
     <div className='audit-monitor-container-main'>
       {console.log("State", state)}
       <FluentProvider theme={webLightTheme}>
+        <div className='audit-monitor-container-main-search'>
+          <Input
+            contentBefore={<SearchSparkle16Filled />}
+            placeholder='Digite o campo desejado.'
+            onChange={(e) => getItensFilter(e.currentTarget.value)}
+            style={{ width: "100%" }}
+          />
+        </div>
         {state.auditsGroup && Object.keys(state.auditsGroup).map((key, xi) => {
           return (
             <CardGroups key={"card-groups-" + key} date={new Date(key + "T00:00").toLocaleDateString()}>
@@ -102,7 +124,7 @@ export function Main(props: IMainProps) {
                     name={audit.user.name}
                     totalFields={audit.attributes.length}
                     firts={yi === state.auditsGroup![key].length - 2 && xi === Object.keys(state.auditsGroup!).length - 1}
-                    attributes={audit.attributes}
+                    attributes={audit.attributes.filter(x=> x.displayName?.includes(state.txtFilter || ""))}
                   />
                 );
               })}

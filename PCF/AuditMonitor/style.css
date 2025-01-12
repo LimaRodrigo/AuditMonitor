@@ -9,3 +9,10 @@
     overflow-x: hidden;
     max-height: 75vh;
 }
+.audit-monitor-container-main-search{
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    padding: 5px 0px 5px 0px;
+    width: 100%;
+}
