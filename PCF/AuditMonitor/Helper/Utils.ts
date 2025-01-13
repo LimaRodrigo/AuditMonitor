@@ -127,6 +127,10 @@ export class HelperXrm implements IHelperXrm {
             return acc;
         }, {} as { [key: string]: IAudit[] });
     }
+    normalizeText(text: string | undefined | null): string {
+        if (!text) return "";
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    }
 }
 interface IResponseRequest {
     ok: boolean,

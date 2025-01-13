@@ -1,14 +1,30 @@
 import * as React from 'react';
 import './style.css';
-import { FluentProvider, Input, webLightTheme } from '@fluentui/react-components';
 import { IInputs } from './generated/ManifestTypes';
 import { HelperXrm } from './Helper/Utils';
-import { IAttributesMetadata, IAudit, IAuditDetails, IDataRegister, IEntityDefinitions, IRetrieveRecordChangeHistoryResponse } from './models';
+import {
+  IAttributesMetadata,
+  IAudit,
+  IAuditDetails,
+  IDataRegister,
+  IEntityDefinitions,
+  IRetrieveRecordChangeHistoryResponse
+} from './models';
 import { useState } from 'react';
 import CardItens from './components/cardItens';
 import { CardGroups } from './components/cardGroups';
+import {
+  Button,
+  FluentProvider,
+  Input,
+  webLightTheme,
+  useId
+} from '@fluentui/react-components';
+import {
+  ArrowClockwise16Regular,
+  SearchSparkle16Filled
+} from "@fluentui/react-icons";
 import { mockMetadata } from './Mock';
-import { SearchSparkle16Filled } from "@fluentui/react-icons";
 
 export interface IMainProps {
   name?: string;
@@ -20,45 +36,58 @@ interface IMainState {
   metadataAttributes?: IAttributesMetadata[];
   audits?: IAudit[],
   auditsGroup?: { [key: string]: IAudit[] } | undefined,
-  txtFilter?: string | undefined
+  txtFilter?: string | undefined,
+  txtDefault?: string | undefined
 }
 
 
 
 export function Main(props: IMainProps) {
-  const [state, setState] = useState<IMainState>({});
+  const [state, setState] = useState<IMainState>({ txtFilter: "" });
+  const [stateNew, setStatenew] = useState<number>(0);
+  const inputId = useId("inputSearch");
 
   React.useEffect(() => {
-    const getData = async () => {
+    const getDataOnload = async () => {
       try {
-        const hpUtil = new HelperXrm(props.context);
-        const audits: IAudit[] = [];
-        const dataRegister = getDataRegister();
-        const [promiseAudit, promiseMetadataAttributes] = await Promise.all([hpUtil.RetrieveRecordChangeHistoryRequest(dataRegister.entityLogicalName, dataRegister.id), getMetadataAttributes(dataRegister.entityLogicalName)]);
-        promiseAudit.AuditDetailCollection.AuditDetails.forEach((auditDynamics: IAuditDetails) => {
-          audits.push(hpUtil.ConvertAuditDynamicsToAudit(auditDynamics, promiseMetadataAttributes));
-        });
-
-        setState({
-          dataRegister: dataRegister,
-          auditsDynamics: promiseAudit,
-          metadataAttributes: promiseMetadataAttributes as IAttributesMetadata[],
-          audits: audits,
-          auditsGroup: hpUtil.groupAuditsByDate(audits)
-        });
+        await getData();
       } catch (error) {
         console.error("Error fetching data", error);
       }
     }
-    getData();
+    getDataOnload();
   }, [props.name]);
 
-  const getItensFilter = (val: string) => {
+  const getData = async (val?: string) => {
     const hpUtil = new HelperXrm(props.context);
-    const auditFilter = state.audits?.filter(x => x.attributes.find(x => x.displayName?.includes(val)));
+    const audits: IAudit[] = [];
+    const dataRegister = getDataRegister();
+    const [promiseAudit, promiseMetadataAttributes] = await Promise.all([
+      hpUtil.RetrieveRecordChangeHistoryRequest(dataRegister.entityLogicalName, dataRegister.id),
+      getMetadataAttributes(dataRegister.entityLogicalName)
+    ]);
+    promiseAudit.AuditDetailCollection.AuditDetails.forEach((auditDynamics: IAuditDetails) => {
+      audits.push(hpUtil.ConvertAuditDynamicsToAudit(auditDynamics, promiseMetadataAttributes));
+    });
 
-    console.log("getItensFilter", auditFilter);
+    setState({
+      dataRegister: dataRegister,
+      auditsDynamics: promiseAudit,
+      metadataAttributes: promiseMetadataAttributes as IAttributesMetadata[],
+      audits: audits,
+      auditsGroup: hpUtil.groupAuditsByDate(audits),
+      txtFilter: "",
+      txtDefault: "",
+    });
+  }
 
+
+  const getItensFilter = (val: string) => {
+    // console.log("getItensFilter", val);
+    const hpUtil = new HelperXrm(props.context);
+    const normalizedSearchText = hpUtil.normalizeText(val);
+    const auditFilter = state.audits?.filter(
+      x => x.attributes.some(x => hpUtil.normalizeText(x.displayName).includes(normalizedSearchText)));
     setState({
       ...state,
       txtFilter: val,
@@ -66,8 +95,6 @@ export function Main(props: IMainProps) {
     })
 
   }
-
-
   const getDataRegister = (): IDataRegister => {
     return {
       //eslint-disable-next-line
@@ -78,7 +105,6 @@ export function Main(props: IMainProps) {
       entityLogicalName: props.context?.mode.contextInfo.entityTypeName
     } as IDataRegister;
   }
-
   const getMetadataAttributes = async (entityLogicalName: string): Promise<IAttributesMetadata[]> => {
     if (window.location.href.includes("localhost")) {
       return new Promise((resolve, reject) => {
@@ -105,10 +131,19 @@ export function Main(props: IMainProps) {
       <FluentProvider theme={webLightTheme}>
         <div className='audit-monitor-container-main-search'>
           <Input
+            id={inputId}
             contentBefore={<SearchSparkle16Filled />}
             placeholder='Digite o campo desejado.'
-            onChange={(e) => getItensFilter(e.currentTarget.value)}
+            onChange={(e, data) => { setState({ ...state, txtFilter: data.value }) }}
             style={{ width: "100%" }}
+            value={state.txtFilter}
+            as='input'
+            type='text'
+          />
+          <Button
+            // onClick={async () => await getData()}
+            onClick={() => { setState({ ...state, txtFilter: "" }); setStatenew(stateNew + 1) }}
+            icon={<ArrowClockwise16Regular />}
           />
         </div>
         {state.auditsGroup && Object.keys(state.auditsGroup).map((key, xi) => {
@@ -118,13 +153,13 @@ export function Main(props: IMainProps) {
                 return (
                   audit.attributes.length > 0 &&
                   <CardItens
-                    key={"card-" + audit.id}
+                    key={"card-" + yi + audit.id}
                     hour={audit.hour}
                     action={audit.operation}
                     name={audit.user.name}
                     totalFields={audit.attributes.length}
                     firts={yi === state.auditsGroup![key].length - 2 && xi === Object.keys(state.auditsGroup!).length - 1}
-                    attributes={audit.attributes.filter(x=> x.displayName?.includes(state.txtFilter || ""))}
+                    attributes={audit.attributes.filter(x => x.displayName?.includes(state.txtFilter || ""))}
                   />
                 );
               })}
