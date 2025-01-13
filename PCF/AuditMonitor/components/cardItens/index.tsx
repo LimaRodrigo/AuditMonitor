@@ -24,8 +24,6 @@ interface ICardItensProps {
 }
 
 export default function CardItens(props: ICardItensProps) {
-
-
     const modifieldData = (data: string | number | boolean | object | undefined) => {
         switch (data) {
             case true:
@@ -37,9 +35,9 @@ export default function CardItens(props: ICardItensProps) {
         }
     }
 
-
     return (
         <div className='audit-monitor-card-item'>
+            {/* {console.log("ICardItensProps", props)} */}
             <div className='audit-monitor-card-item-timeline'>
                 <TimelineIten first={props.firts} />
             </div>
@@ -48,26 +46,10 @@ export default function CardItens(props: ICardItensProps) {
                 <Caption1Strong>{props.action} - {props.totalFields} campos</Caption1Strong>
                 <Popover withArrow positioning={{ align: 'center', position: 'below' }}>
                     <PopoverTrigger disableButtonEnhancement>
-                     <Link><Caption1Strong>Mais detalhes</Caption1Strong></Link>   
+                     <Link disabled={props.attributes?.length === 0} ><Caption1Strong>Mais detalhes</Caption1Strong></Link>   
                     </PopoverTrigger>
-
                     <PopoverSurface tabIndex={-1} style={{ maxHeight: '400px', overflowY: 'auto' }}>
                         <Table size='small' style={{ maxWidth: '550px' }}>
-                            {/* <TableHeader as="thead">
-                                <TableRow as='tr'>
-                                    <TableHeaderCell as='th' style={{ width: '40%' }}>
-                                        <Body1Stronger>Campo</Body1Stronger>
-                                    </TableHeaderCell>
-                                    <TableHeaderCell as='th' style={{ width: '32.5%' }}>
-                                        <Body1Stronger>Antigo</Body1Stronger>
-                                    </TableHeaderCell>
-                                    <TableHeaderCell as='th' style={{ width: '5%' }}>
-                                    </TableHeaderCell>
-                                    <TableHeaderCell as='th' style={{ width: '32.5%' }}>
-                                        <Body1Stronger>Novo</Body1Stronger>
-                                    </TableHeaderCell>
-                                </TableRow>
-                            </TableHeader> */}
                             <TableBody>
                                 {props.attributes?.map((attribute, index) => {
                                     return (
@@ -90,34 +72,8 @@ export default function CardItens(props: ICardItensProps) {
                                 })}
                             </TableBody>
                         </Table>
-
-
-
-                        {/* <table>
-                            <thead>
-                                <tr>
-                                    <th>Campo</th>
-                                    <th>Valor Antigo</th>
-                                    <th>Valor Novo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {props.attributes?.map((attribute, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{attribute.displayName}</td>
-                                            <td>{attribute.oldValue}</td>
-                                            <td>{attribute.newValue}</td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table> */}
-
                     </PopoverSurface>
                 </Popover>
-                {/* <span className='audit-monitor-card-item-content-link'><a href='#'>Mais detalhes</a></span> */}
-
             </div>
         </div>
     );

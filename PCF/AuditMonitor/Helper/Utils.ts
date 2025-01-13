@@ -1,6 +1,6 @@
 import { IInputs } from "../generated/ManifestTypes";
 import { mockAudit, mockMetadata } from "../Mock";
-import { IAttributesMetadata, IAudit, IAuditDetails, IAuditDynamics, IChangeData, IDataAttributes, IRetrieveRecordChangeHistoryResponse } from "../models";
+import { IAttributesMetadata, IAudit, IAuditDetails, IAuditDynamics, IChangeData, IDataAttributes, IEntityDefinitions, IRetrieveRecordChangeHistoryResponse } from "../models";
 
 interface IHelperXrm {
     context?: ComponentFramework.Context<IInputs> | undefined;
@@ -63,7 +63,7 @@ export class HelperXrm implements IHelperXrm {
             id: auditDynamics.AuditRecord.auditid,
             date: new Date(auditDynamics.AuditRecord["createdon"]),
             hour: auditDynamics.AuditRecord["createdon@OData.Community.Display.V1.FormattedValue"].split(" ")[1],
-            operation: auditDynamics.AuditRecord["operation@OData.Community.Display.V1.FormattedValue"],
+            action: auditDynamics.AuditRecord["action@OData.Community.Display.V1.FormattedValue"],
             user: {
                 id: auditDynamics.AuditRecord._userid_value,
                 name: auditDynamics.AuditRecord["_userid_value@OData.Community.Display.V1.FormattedValue"],
@@ -107,6 +107,23 @@ export class HelperXrm implements IHelperXrm {
             ).catch((e: object) => reject(e));
         });
     }
+    getMetadataAttributes = async (entityLogicalName: string): Promise<IAttributesMetadata[]> => {
+        if (window.location.href.includes("localhost")) {
+          return new Promise((resolve, reject) => {
+            return resolve(mockMetadata);
+          });
+        }
+        const metadata: IAttributesMetadata[] = [];
+        const response = await this.FetchJS(`api/data/v9.1/EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes?$select=LogicalName,DisplayName&$filter=AttributeOf eq null&$orderby=DisplayName asc`) as IEntityDefinitions[];
+        response.forEach((element: IEntityDefinitions) => {
+          metadata.push({
+            logicalName: element.LogicalName,
+            displayName: element.DisplayName.UserLocalizedLabel?.Label
+          });
+        });
+        return metadata;
+      }
+
     truncateText(text: string): string {
         const maxLength = 23;
         if (text.length <= maxLength) {

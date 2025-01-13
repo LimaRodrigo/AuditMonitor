@@ -14,7 +14,7 @@ export interface IAudit {
     id: string;
     date: Date;
     hour?: string;
-    operation: string;
+    action: string;
     user: ILookup;
     attributes: IDataAttributes[];
 }
@@ -22,7 +22,7 @@ export interface IAudit {
 export interface IAuditDynamics {
     createdon: string;
     auditid: string;
-    "operation@OData.Community.Display.V1.FormattedValue": string;
+    "action@OData.Community.Display.V1.FormattedValue": string;
     _userid_value: string;
     "_userid_value@Microsoft.Dynamics.CRM.lookuplogicalname": string;
     "_userid_value@OData.Community.Display.V1.FormattedValue": string;
@@ -72,7 +72,7 @@ export interface IAuditRecord {
     createdon: string;
     "createdon@OData.Community.Display.V1.FormattedValue": string;
     "_userid_value@Microsoft.Dynamics.CRM.lookuplogicalname": string;
-    "operation@OData.Community.Display.V1.FormattedValue": string;
+    "action@OData.Community.Display.V1.FormattedValue": string;
     "_userid_value@OData.Community.Display.V1.FormattedValue": string;
     "_userid_value": string;
 }

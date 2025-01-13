@@ -6,7 +6,7 @@ export const mockAudit: IRetrieveRecordChangeHistoryResponse = {
         "AuditDetails": [
             {
                 "AuditRecord": {
-                    "operation@OData.Community.Display.V1.FormattedValue": "Atualizar",
+                    "action@OData.Community.Display.V1.FormattedValue": "Atualizar",
                     "createdon@OData.Community.Display.V1.FormattedValue": "07/01/2025 15:58",
                     "createdon": "2025-01-07T18:58:30Z",
                     "auditid": "daedb3fc-9ade-42b3-80c5-45c3e62cefd7",
@@ -25,7 +25,7 @@ export const mockAudit: IRetrieveRecordChangeHistoryResponse = {
             },
             {
                 "AuditRecord": {
-                    "operation@OData.Community.Display.V1.FormattedValue": "Atualizar",
+                    "action@OData.Community.Display.V1.FormattedValue": "Atualizar",
                     "createdon@OData.Community.Display.V1.FormattedValue": "19/12/2024 14:43",
                     "createdon": "2024-12-19T17:43:36Z",
                     "auditid": "269e84c0-f4a6-4627-a8af-35431a163e3d",
@@ -44,7 +44,7 @@ export const mockAudit: IRetrieveRecordChangeHistoryResponse = {
             },
             {
                 "AuditRecord": {
-                    "operation@OData.Community.Display.V1.FormattedValue": "Atualizar",
+                    "action@OData.Community.Display.V1.FormattedValue": "Atualizar",
                     "createdon@OData.Community.Display.V1.FormattedValue": "19/12/2024 11:12",
                     "createdon": "2024-12-19T14:12:14Z",
                     "auditid": "3ff8c038-80d6-4dc9-8f96-a4493a2b9e29",
@@ -71,9 +71,9 @@ export const mockAudit: IRetrieveRecordChangeHistoryResponse = {
             },
             {
                 "AuditRecord": {
-                    "operation@OData.Community.Display.V1.FormattedValue": "Criar",
-                    "createdon@OData.Community.Display.V1.FormattedValue": "18/12/2024 10:14",
-                    "createdon": "2024-12-18T13:14:06Z",
+                    "action@OData.Community.Display.V1.FormattedValue": "Criar",
+                    "createdon@OData.Community.Display.V1.FormattedValue": "18/12/2024 15:20",
+                    "createdon": "2024-12-18T15:20:06Z",
                     "auditid": "96ecdd23-385e-45a5-8d93-e160c9fb7ae1",
                     "_userid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "systemuser",
                     "_userid_value@OData.Community.Display.V1.FormattedValue": "Lima, Rodrigo",
@@ -148,7 +148,7 @@ export const mockAudit: IRetrieveRecordChangeHistoryResponse = {
             },
             {
                 "AuditRecord": {
-                    "operation@OData.Community.Display.V1.FormattedValue": "Atualizar",
+                    "action@OData.Community.Display.V1.FormattedValue": "Atualizar",
                     "createdon@OData.Community.Display.V1.FormattedValue": "18/12/2024 10:12",
                     "createdon": "2024-12-18T13:12:54Z",
                     "auditid": "e0152381-2956-4dbe-b1fc-2f2b3057ddea",
@@ -159,7 +159,7 @@ export const mockAudit: IRetrieveRecordChangeHistoryResponse = {
             },
             {
                 "AuditRecord": {
-                    "operation@OData.Community.Display.V1.FormattedValue": "Atualizar",
+                    "action@OData.Community.Display.V1.FormattedValue": "Atualizar",
                     "createdon@OData.Community.Display.V1.FormattedValue": "07/01/2025 15:58",
                     "createdon": "2025-01-07T18:58:30Z",
                     "auditid": "4d7c2372-3c4c-47d9-ad3e-d4b51158eac0",
@@ -178,7 +178,7 @@ export const mockAudit: IRetrieveRecordChangeHistoryResponse = {
             },
             {
                 "AuditRecord": {
-                    "operation@OData.Community.Display.V1.FormattedValue": "Atualizar",
+                    "action@OData.Community.Display.V1.FormattedValue": "Atualizar",
                     "createdon@OData.Community.Display.V1.FormattedValue": "19/12/2024 14:43",
                     "createdon": "2024-12-19T17:43:36Z",
                     "auditid": "269e84c0-f4a6-4627-a8af-35431a163e3d",
@@ -197,7 +197,7 @@ export const mockAudit: IRetrieveRecordChangeHistoryResponse = {
             },
             {
                 "AuditRecord": {
-                    "operation@OData.Community.Display.V1.FormattedValue": "Atualizar",
+                    "action@OData.Community.Display.V1.FormattedValue": "Atualizar",
                     "createdon@OData.Community.Display.V1.FormattedValue": "19/12/2024 11:12",
                     "createdon": "2024-12-19T14:12:14Z",
                     "auditid": "3ff8c038-80d6-4dc9-8f96-a4493a2b9e29",
@@ -224,7 +224,7 @@ export const mockAudit: IRetrieveRecordChangeHistoryResponse = {
             },
             {
                 "AuditRecord": {
-                    "operation@OData.Community.Display.V1.FormattedValue": "Criar",
+                    "action@OData.Community.Display.V1.FormattedValue": "Criar",
                     "createdon@OData.Community.Display.V1.FormattedValue": "18/12/2024 10:14",
                     "createdon": "2024-12-18T13:14:06Z",
                     "auditid": "96ecdd23-385e-45a5-8d93-e160c9fb7ae1",
@@ -301,7 +301,7 @@ export const mockAudit: IRetrieveRecordChangeHistoryResponse = {
             },
             {
                 "AuditRecord": {
-                    "operation@OData.Community.Display.V1.FormattedValue": "Atualizar",
+                    "action@OData.Community.Display.V1.FormattedValue": "Atualizar",
                     "createdon@OData.Community.Display.V1.FormattedValue": "18/12/2024 10:12",
                     "createdon": "2024-12-18T13:12:54Z",
                     "auditid": "148d5cb4-29cd-4b45-a376-d7a3e47fb408",
