@@ -18,6 +18,7 @@ import {
     Caption1,
 } from '@fluentui/react-components';
 import { IDataAttributes } from '../../models';
+import { IInputs } from '../../generated/ManifestTypes';
 
 interface ICardItensProps {
     hour?: string;
@@ -26,6 +27,7 @@ interface ICardItensProps {
     totalFields?: number;
     firts: boolean;
     attributes?: IDataAttributes[];
+    context?: ComponentFramework.Context<IInputs>;
 }
 
 export default function CardItens(props: ICardItensProps) {
@@ -47,7 +49,7 @@ export default function CardItens(props: ICardItensProps) {
             </div>
             <div className='audit-monitor-card-item-content'>
                 <Body1Stronger className='audit-monitor-card-item-content-title'>{props.hour} - {props.name}</Body1Stronger>
-                <Caption1Strong>{props.action} - {props.totalFields} campos</Caption1Strong>
+                <Caption1Strong>{props.action} - {props.totalFields} {props.context?.resources.getString("field-updates")}</Caption1Strong>
                 <Popover
                     withArrow
                     positioning={{ align: 'center', position: 'below' }}
@@ -56,7 +58,7 @@ export default function CardItens(props: ICardItensProps) {
                 >
                     <PopoverTrigger disableButtonEnhancement>
                         <Link disabled={props.attributes?.length === 0} >
-                            <Caption1Strong>Mais detalhes</Caption1Strong>
+                            <Caption1Strong>{props.context?.resources.getString("label-more-details")}</Caption1Strong>
                         </Link>
                     </PopoverTrigger>
                     <PopoverSurface

@@ -23,6 +23,7 @@ import {
   ArrowClockwise16Regular,
   SearchSparkle16Filled
 } from "@fluentui/react-icons";
+import Loading from './components/loading';
 
 export interface IMainProps {
   name?: string;
@@ -35,12 +36,13 @@ interface IMainState {
   audits?: IAudit[],
   auditsGroup?: { [key: string]: IAudit[] } | undefined,
   txtFilter?: string | undefined,
+  isLoading: boolean;
 }
 
 
 
 export function Main(props: IMainProps) {
-  const [state, setState] = useState<IMainState>({ txtFilter: "" });
+  const [state, setState] = useState<IMainState>({ txtFilter: "", isLoading: true });
   const inputId = useId("inputSearch");
   const helper = new HelperXrm(props.context);
   React.useEffect(() => {
@@ -56,6 +58,9 @@ export function Main(props: IMainProps) {
 
   const getData = async (val?: string) => {
 
+    if (val)
+      setState({ ...state, isLoading: true })
+
     const audits: IAudit[] = [];
     const dataRegister = getDataRegister();
     const [promiseAudit, promiseMetadataAttributes] = await Promise.all([
@@ -68,7 +73,7 @@ export function Main(props: IMainProps) {
     let auditFilter: IAudit[] | undefined = audits;
     const normalizedSearchText = helper.normalizeText(val);
     if (val) {
-      auditFilter = state.audits?.filter(
+      auditFilter = audits?.filter(
         x => x.attributes.some(x => helper.normalizeText(x.displayName).includes(normalizedSearchText)));
     }
 
@@ -87,6 +92,7 @@ export function Main(props: IMainProps) {
       audits: auditFilter,
       auditsGroup: helper.groupAuditsByDate(auditFilter),
       txtFilter: val,
+      isLoading: false
     });
   }
 
@@ -104,43 +110,49 @@ export function Main(props: IMainProps) {
 
   return (
     <div className='audit-monitor-container-main'>
-      {console.log("State", state)}
       <FluentProvider theme={webLightTheme}>
-        <div className='audit-monitor-container-main-search'>
-          <Input
-            id={inputId}
-            contentBefore={<SearchSparkle16Filled />}
-            placeholder='Digite o campo desejado.'
-            onChange={(e, data) => getData(data.value)}
-            style={{ width: "100%" }}
-            value={state.txtFilter}
-            as='input'
-            type='text'
-          />
-          <Button
-            onClick={async () => await getData()}
-            icon={<ArrowClockwise16Regular />}
-          />
-        </div>
-        {state.auditsGroup && Object.keys(state.auditsGroup).map((key, xi) => {
-          return (
-            <CardGroups key={"card-groups-" + key} date={new Date(key + "T00:00").toLocaleDateString()}>
-              {state.auditsGroup![key].map((audit, yi) => {
-                return (
-                  <CardItens
-                    key={"card-" + yi + audit.id}
-                    hour={audit.hour}
-                    action={audit.action}
-                    name={audit.user.name}
-                    totalFields={audit.attributes.length}
-                    firts={yi === state.auditsGroup![key].length - 1 && xi === Object.keys(state.auditsGroup!).length - 1}
-                    attributes={audit.attributes.filter(x => helper.normalizeText(x.displayName).includes(helper.normalizeText(state.txtFilter)))}
-                  />
-                );
-              })}
-            </CardGroups>
-          )
-        })
+        {console.log("State", state)}
+        {console.log("userSettings", props.context?.formatting)}
+
+        {state.isLoading ? <Loading /> : <>
+          <div className='audit-monitor-container-main-search'>
+            <Input
+              id={inputId}
+              contentBefore={<SearchSparkle16Filled />}
+              placeholder={props.context?.resources.getString("place-holder-search")}
+              onChange={(e, data) => getData(data.value)}
+              style={{ width: "100%" }}
+              value={state.txtFilter}
+              as='input'
+              type='text'
+            />
+            <Button
+              onClick={async () => await getData()}
+              icon={<ArrowClockwise16Regular />}
+            />
+          </div>
+          {state.auditsGroup && Object.keys(state.auditsGroup).map((key, xi) => {
+            return (
+              <CardGroups key={"card-groups-" + key} date={new Date(key + "T00:00").toLocaleDateString()}>
+                {state.auditsGroup![key].map((audit, yi) => {
+                  return (
+                    <CardItens
+                      key={"card-" + yi + audit.id}
+                      hour={audit.hour}
+                      action={audit.action}
+                      name={audit.user.name}
+                      totalFields={audit.attributes.length}
+                      firts={yi === state.auditsGroup![key].length - 1 && xi === Object.keys(state.auditsGroup!).length - 1}
+                      attributes={audit.attributes.filter(x => helper.normalizeText(x.displayName).includes(helper.normalizeText(state.txtFilter)))}
+                      context={props.context}
+                    />
+                  );
+                })}
+              </CardGroups>
+            )
+          })
+          }
+        </>
         }
       </FluentProvider>
     </div>
