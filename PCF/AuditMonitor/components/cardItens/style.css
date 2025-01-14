@@ -21,3 +21,11 @@
 .audit-monitor-card-item-content-title{
     color: rgba(218,165,32, 1);
 }
+.audit-monitor-card-item-content-popover-surface{
+    max-width: 400px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+.audit-monitor-card-item-content-table-row{
+    width: 33.3%;
+}

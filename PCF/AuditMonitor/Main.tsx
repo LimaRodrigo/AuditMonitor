@@ -127,7 +127,6 @@ export function Main(props: IMainProps) {
             <CardGroups key={"card-groups-" + key} date={new Date(key + "T00:00").toLocaleDateString()}>
               {state.auditsGroup![key].map((audit, yi) => {
                 return (
-                  // audit.attributes.length > 0 &&
                   <CardItens
                     key={"card-" + yi + audit.id}
                     hour={audit.hour}

@@ -18,9 +18,7 @@ export function CardGroups(props: ICardItensProps) {
                 <div className='audit-monitor-cardgroups-container-line-horizontal'></div>
             </div>
             <div className='audit-monitor-cardgroups-container-hour'>
-
                 {props.children}
-
             </div>
         </div>
     );

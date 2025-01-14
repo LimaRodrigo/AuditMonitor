@@ -1,6 +1,17 @@
 import { IInputs } from "../generated/ManifestTypes";
 import { mockAudit, mockMetadata } from "../Mock";
-import { IAttributesMetadata, IAudit, IAuditDetails, IAuditDynamics, IChangeData, IDataAttributes, IEntityDefinitions, IRetrieveRecordChangeHistoryResponse } from "../models";
+import {
+    IAttributesMetadata,
+    IAudit,
+    IAuditDetails,
+    IDataAttributes,
+    IEntityDefinitions,
+    IResponseRequest,
+    IRetrieveRecordChangeHistoryResponse,
+    IXrmParameterTypeCollection,
+    IXrmRequest,
+    IXrmRequestMetadata
+} from "../models";
 
 interface IHelperXrm {
     context?: ComponentFramework.Context<IInputs> | undefined;
@@ -109,20 +120,20 @@ export class HelperXrm implements IHelperXrm {
     }
     getMetadataAttributes = async (entityLogicalName: string): Promise<IAttributesMetadata[]> => {
         if (window.location.href.includes("localhost")) {
-          return new Promise((resolve, reject) => {
-            return resolve(mockMetadata);
-          });
+            return new Promise((resolve, reject) => {
+                return resolve(mockMetadata);
+            });
         }
         const metadata: IAttributesMetadata[] = [];
         const response = await this.FetchJS(`api/data/v9.1/EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes?$select=LogicalName,DisplayName&$filter=AttributeOf eq null&$orderby=DisplayName asc`) as IEntityDefinitions[];
         response.forEach((element: IEntityDefinitions) => {
-          metadata.push({
-            logicalName: element.LogicalName,
-            displayName: element.DisplayName.UserLocalizedLabel?.Label
-          });
+            metadata.push({
+                logicalName: element.LogicalName,
+                displayName: element.DisplayName.UserLocalizedLabel?.Label
+            });
         });
         return metadata;
-      }
+    }
 
     truncateText(text: string): string {
         const maxLength = 23;
@@ -148,31 +159,4 @@ export class HelperXrm implements IHelperXrm {
         if (!text) return "";
         return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     }
-}
-interface IResponseRequest {
-    ok: boolean,
-    status: number,
-    statusText?: string,
-
-    json: () => object
-}
-export interface IXrmRequest extends IPropertyRequest {
-    getMetadata: () => IXrmRequestMetadata;
-}
-export interface IPropertyRequest {
-    [property: string]: string | number | object;
-}
-export interface IXrmRequestMetadata {
-    boundParameter?: object | null;
-
-    parameterTypes: IXrmParameterTypeCollection;
-    operationType: number;
-    operationName: string;
-}
-export interface IXrmParameterTypeCollection {
-    [property: string]: IXrmParameterType;
-}
-export interface IXrmParameterType {
-    structuralProperty: number;
-    typeName: string;
 }

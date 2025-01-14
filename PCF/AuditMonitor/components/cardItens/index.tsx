@@ -1,16 +1,21 @@
 import * as React from 'react';
 import './style.css';
- import { ArrowRight16Regular } from "@fluentui/react-icons";
-import { TimelineIten } from '../timelineItens';
+import { ArrowRight16Regular } from "@fluentui/react-icons";
+import { TimelineItens } from '../timelineItens';
 import {
-    Text, Link, Popover, PopoverTrigger, PopoverSurface,
+    Link,
+    Popover,
+    PopoverTrigger,
+    PopoverSurface,
     Table,
     TableBody,
     TableCell,
     TableRow,
     Body1Stronger,
     Caption1Strong,
-    Body1Strong,
+    TableCellLayout,
+    Caption1Stronger,
+    Caption1,
 } from '@fluentui/react-components';
 import { IDataAttributes } from '../../models';
 
@@ -34,38 +39,66 @@ export default function CardItens(props: ICardItensProps) {
                 return data;
         }
     }
-
+    const iconArrow = <ArrowRight16Regular style={{ color: "green" }} />;
     return (
         <div className='audit-monitor-card-item'>
-            {/* {console.log("ICardItensProps", props)} */}
             <div className='audit-monitor-card-item-timeline'>
-                <TimelineIten first={props.firts} />
+                <TimelineItens first={props.firts} />
             </div>
             <div className='audit-monitor-card-item-content'>
                 <Body1Stronger className='audit-monitor-card-item-content-title'>{props.hour} - {props.name}</Body1Stronger>
                 <Caption1Strong>{props.action} - {props.totalFields} campos</Caption1Strong>
-                <Popover withArrow positioning={{ align: 'center', position: 'below' }}>
+                <Popover
+                    withArrow
+                    positioning={{ align: 'center', position: 'below' }}
+                    size='small'
+                    closeOnScroll
+                >
                     <PopoverTrigger disableButtonEnhancement>
-                     <Link disabled={props.attributes?.length === 0} ><Caption1Strong>Mais detalhes</Caption1Strong></Link>   
+                        <Link disabled={props.attributes?.length === 0} >
+                            <Caption1Strong>Mais detalhes</Caption1Strong>
+                        </Link>
                     </PopoverTrigger>
-                    <PopoverSurface tabIndex={-1} style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                        <Table size='small' style={{ maxWidth: '550px' }}>
-                            <TableBody>
+                    <PopoverSurface
+                        tabIndex={-1}
+                        className='audit-monitor-card-item-content-popover-surface'
+                    >
+                        <Table
+                            size='extra-small'
+                            as='table'
+                        >
+                            <TableBody
+                                as='tbody'
+                            >
                                 {props.attributes?.map((attribute, index) => {
                                     return (
-                                        <TableRow key={index}>
-                                            <TableCell style={{ width: '40%' }}>
-                                                <Text><Body1Strong>{attribute.displayName}</Body1Strong></Text>
+                                        <TableRow
+                                            key={index}
+                                            as='tr'
+                                        >
+                                            <TableCell
+                                                className='.audit-monitor-card-item-content-table-row'
+                                                as='td'
+                                            >
+                                                <Caption1Stronger>{attribute.displayName}</Caption1Stronger>
                                             </TableCell>
 
-                                            <TableCell>
-                                                <Text>{attribute.oldValue ? attribute.oldValue: "-" }</Text>
+                                            <TableCell
+                                                className='.audit-monitor-card-item-content-table-row'
+                                                as='td'
+                                            >
+                                                <Caption1>{attribute.oldValue ? attribute.oldValue : "-"}</Caption1>
                                             </TableCell>
-                                            <TableCell>
-                                                <ArrowRight16Regular style={{color: "green"}}/>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Text>{modifieldData(attribute.newValue)}</Text>
+                                            <TableCell
+                                                className='.audit-monitor-card-item-content-table-row'
+                                                as='td'
+                                            >
+                                                <TableCellLayout
+                                                    media={iconArrow}
+                                                    truncate
+                                                >
+                                                    <Caption1>{modifieldData(attribute.newValue)}</Caption1>
+                                                </TableCellLayout>
                                             </TableCell>
                                         </TableRow>
                                     );

@@ -6,16 +6,17 @@ interface ITimelineItenProps {
     first: boolean;
 }
 
-export function TimelineIten(props: ITimelineItenProps) {
-
+function TimelineIten(props: ITimelineItenProps) {
+    const iconCicle = <Circle16Filled style={{ color: "blue" }} />;
+    const iconEdit = <Edit16Regular />;
     return (
         <div className='audit-monitor-card-timelineitem'>
-            <Edit16Regular />
+            {iconEdit}
             <div className="audit-monitor-card-timelineitem-line">
 
             </div>
-            {props.first && <Circle16Filled style={{ color: "blue" }} />}
+            {props.first && iconCicle}
         </div>
-
     );
 }
+export const TimelineItens = React.memo(TimelineIten);

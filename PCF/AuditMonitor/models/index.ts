@@ -68,15 +68,48 @@ export interface IAuditDetails {
 }
 
 export interface IAuditRecord {
+    "@odata.type"?: string;
     auditid: string;
     createdon: string;
     "createdon@OData.Community.Display.V1.FormattedValue": string;
     "_userid_value@Microsoft.Dynamics.CRM.lookuplogicalname": string;
+    "operation@OData.Community.Display.V1.FormattedValue": string;
+    operation?: number;
+    action?: number;
     "action@OData.Community.Display.V1.FormattedValue": string;
     "_userid_value@OData.Community.Display.V1.FormattedValue": string;
     "_userid_value": string;
+    attributemask?: string;
 }
 
 export interface IobjGerenic {
     [property: string]: string | number | object | boolean;
+}
+
+export interface IResponseRequest {
+    ok: boolean,
+    status: number,
+    statusText?: string,
+
+    json: () => object
+}
+export interface IXrmRequest extends IPropertyRequest {
+    getMetadata: () => IXrmRequestMetadata;
+}
+export interface IPropertyRequest {
+    [property: string]: string | number | object;
+}
+export interface IXrmRequestMetadata {
+    boundParameter?: object | null;
+
+    parameterTypes: IXrmParameterTypeCollection;
+    operationType: number;
+    operationName: string;
+}
+export interface IXrmParameterTypeCollection {
+    [property: string]: IXrmParameterType;
+}
+export interface IXrmParameterType {
+    structuralProperty: number;
+    typeName: string;
 }
