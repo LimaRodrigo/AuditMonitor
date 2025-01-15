@@ -57,9 +57,9 @@ export function Main(props: IMainProps) {
     getDataOnload();
   }, [props.name]);
 
-  const getData = async (val?: string) => {
+  const getData = async (val?: string, refresh: boolean = false) => {
 
-    if (val)
+    if (refresh)
       setState({ ...state, isLoading: true })
 
     const audits: IAudit[] = [];
@@ -126,7 +126,7 @@ export function Main(props: IMainProps) {
               type='text'
             />
             <Button
-              onClick={async () => await getData()}
+              onClick={async () => await getData("", true)}
               icon={<ArrowClockwise16Regular />}
             />
           </div>
