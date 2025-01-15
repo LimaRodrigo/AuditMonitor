@@ -1,0 +1,20 @@
+.audit-monitor-container-main {
+    margin-top: 5px;
+    padding: 0px 5px 0px 5px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: auto;
+    overflow-x: auto;
+    max-height: 75vh;
+    min-height: 200px;
+}
+.audit-monitor-container-main-search{
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    padding: 5px 0px 5px 0px;
+    width: 100%;
+    gap: 3px;
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest>
+  <control namespace="pcfs.audit" constructor="AuditMonitor" version="1.0.0" display-name-key="AuditMonitor" description-key="AuditMonitor description" control-type="virtual" >
+    <external-service-usage enabled="false">
+    </external-service-usage>
+    <property name="name" display-name-key="name_Key" description-key="Primary name column" of-type="SingleLine.Text" usage="bound" required="true" />
+    <resources>
+      <code path="index.ts" order="1"/>
+      <platform-library name="React" version="16.14.0" />
+      <platform-library name="Fluent" version="9.46.2" />
+      <resx path="strings/AuditMonitor.1046.resx" version="1.0.0" />
+      <resx path="strings/AuditMonitor.1033.resx" version="1.0.0" />
+      <resx path="strings/AuditMonitor.1036.resx" version="1.0.0" />
+      <resx path="strings/AuditMonitor.3082.resx" version="1.0.0" />
+    </resources>
+    <feature-usage>
+      <uses-feature name="WebAPI" required="true" />
+    </feature-usage>
+  </control>
+</manifest>
