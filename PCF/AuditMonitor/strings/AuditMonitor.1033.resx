@@ -52,6 +52,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="audit-title" xml:space="preserve">
+    <value>Audit</value>
+    <comment/>
+  </data>
   <data name="place-holder-search" xml:space="preserve">
     <value>Enter the desired field</value>
     <comment/>

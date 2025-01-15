@@ -17,7 +17,8 @@ import {
   FluentProvider,
   Input,
   webLightTheme,
-  useId
+  useId,
+  Body1Stronger
 } from '@fluentui/react-components';
 import {
   ArrowClockwise16Regular,
@@ -107,13 +108,11 @@ export function Main(props: IMainProps) {
     } as IDataRegister;
   }
 
-
   return (
     <div className='audit-monitor-container-main'>
       <FluentProvider theme={webLightTheme}>
         {console.log("State", state)}
-        {console.log("userSettings", props.context?.formatting)}
-
+        <Body1Stronger>{props.context?.resources.getString("audit-title")}</Body1Stronger>
         {state.isLoading ? <Loading /> : <>
           <div className='audit-monitor-container-main-search'>
             <Input
