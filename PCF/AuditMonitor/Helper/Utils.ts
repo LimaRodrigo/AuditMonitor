@@ -1,5 +1,4 @@
 import { IInputs } from "../generated/ManifestTypes";
-import { mockAudit, mockMetadata } from "../Mock";
 import {
     IAttributesMetadata,
     IAudit,
@@ -96,12 +95,6 @@ export class HelperXrm implements IHelperXrm {
     }
 
     async RetrieveRecordChangeHistoryRequest(entityLogicalName: string, registerId: string): Promise<IRetrieveRecordChangeHistoryResponse> {
-        if (window.location.href.includes("localhost")) {
-            return new Promise((resolve, reject) => {
-                return resolve(mockAudit);
-            });
-        }
-
         const target = Object.create(null);
         target["@odata.type"] = `Microsoft.Dynamics.CRM.${entityLogicalName}`;
         target[entityLogicalName + "id"] = registerId;
@@ -131,11 +124,6 @@ export class HelperXrm implements IHelperXrm {
         });
     }
     getMetadataAttributes = async (entityLogicalName: string): Promise<IAttributesMetadata[]> => {
-        if (window.location.href.includes("localhost")) {
-            return new Promise((resolve, reject) => {
-                return resolve(mockMetadata);
-            });
-        }
         const metadata: IAttributesMetadata[] = [];
         const response = await this.FetchJS(`api/data/v9.1/EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes?$select=LogicalName,DisplayName&$filter=AttributeOf eq null&$orderby=DisplayName asc`) as IEntityDefinitions[];
         response.forEach((element: IEntityDefinitions) => {
