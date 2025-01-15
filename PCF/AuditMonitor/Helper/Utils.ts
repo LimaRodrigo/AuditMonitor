@@ -6,6 +6,7 @@ import {
     IAuditDetails,
     IDataAttributes,
     IEntityDefinitions,
+    IobjGerenic,
     IResponseRequest,
     IRetrieveRecordChangeHistoryResponse,
     IXrmParameterTypeCollection,
@@ -55,8 +56,8 @@ export class HelperXrm implements IHelperXrm {
                 dataAttributes.push({
                     logicalName: meta.logicalName,
                     displayName: meta.displayName,
-                    oldValue: propsOld.includes(meta.logicalName) ? auditDynamics.OldValue![meta.logicalName] : "",
-                    newValue: propsNew.includes(meta.logicalName) ? auditDynamics.NewValue![meta.logicalName] : ""
+                    oldValue: propsOld.includes(meta.logicalName) ? this.getFormatedValue(propsOld, auditDynamics.OldValue, meta.logicalName) : "",
+                    newValue: propsNew.includes(meta.logicalName) ? this.getFormatedValue(propsNew, auditDynamics.NewValue, meta.logicalName)  : ""
                 });
             }
             else if (propsNew.includes(`_${meta.logicalName}_value`)) {
@@ -83,6 +84,17 @@ export class HelperXrm implements IHelperXrm {
             attributes: dataAttributes
         } as IAudit;
     }
+
+    getFormatedValue(fields: string[], val: IobjGerenic | undefined, logicalName: string): string | number | boolean | object | undefined {
+        if (!val) return val;
+
+        if (fields.includes(`${logicalName}@OData.Community.Display.V1.FormattedValue`))
+            return val[`${logicalName}@OData.Community.Display.V1.FormattedValue`];
+        else
+            return val[logicalName];
+
+    }
+
     async RetrieveRecordChangeHistoryRequest(entityLogicalName: string, registerId: string): Promise<IRetrieveRecordChangeHistoryResponse> {
         if (window.location.href.includes("localhost")) {
             return new Promise((resolve, reject) => {
