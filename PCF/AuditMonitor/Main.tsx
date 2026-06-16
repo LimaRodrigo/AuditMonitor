@@ -48,53 +48,56 @@ export function Main(props: IMainProps) {
   const helper = new HelperXrm(props.context);
   React.useEffect(() => {
     const getDataOnload = async () => {
-      try {
-        await getData();
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
+      await getData();
     }
     getDataOnload();
   }, [props.name]);
 
   const getData = async (val?: string, refresh: boolean = false) => {
+    try {
+      if (refresh)
+        setState({ ...state, isLoading: true })
 
-    if (refresh)
-      setState({ ...state, isLoading: true })
+      const audits: IAudit[] = [];
+      const dataRegister = getDataRegister();
+      const [promiseAudit, promiseMetadataAttributes] = await Promise.all([
+        helper.RetrieveRecordChangeHistoryRequest(dataRegister.entityLogicalName, dataRegister.id),
+        helper.getMetadataAttributes(dataRegister.entityLogicalName)
+      ]);
+      promiseAudit.AuditDetailCollection?.AuditDetails?.forEach((auditDynamics: IAuditDetails) => {
+        const audit = helper.ConvertAuditDynamicsToAudit(auditDynamics, promiseMetadataAttributes);
 
-    const audits: IAudit[] = [];
-    const dataRegister = getDataRegister();
-    const [promiseAudit, promiseMetadataAttributes] = await Promise.all([
-      helper.RetrieveRecordChangeHistoryRequest(dataRegister.entityLogicalName, dataRegister.id),
-      helper.getMetadataAttributes(dataRegister.entityLogicalName)
-    ]);
-    promiseAudit.AuditDetailCollection.AuditDetails.forEach((auditDynamics: IAuditDetails) => {
-      audits.push(helper.ConvertAuditDynamicsToAudit(auditDynamics, promiseMetadataAttributes));
-    });
-    let auditFilter: IAudit[] | undefined = audits;
-    const normalizedSearchText = helper.normalizeText(val);
-    if (val) {
-      auditFilter = audits?.filter(
-        x => x.attributes.some(x => helper.normalizeText(x.displayName).includes(normalizedSearchText)));
+        if (audit) {
+          audits.push(audit);
+        }
+      });
+      let auditFilter: IAudit[] | undefined = audits;
+      const normalizedSearchText = helper.normalizeText(val);
+      if (val) {
+        auditFilter = audits?.filter(
+          x => x.attributes.some(x => helper.normalizeText(x.displayName).includes(normalizedSearchText)));
+      }
+
+
+      setState({
+        dataRegister,
+        auditsDynamics: promiseAudit,
+        metadataAttributes: promiseMetadataAttributes as IAttributesMetadata[],
+        audits: auditFilter,
+        auditsGroup: helper.groupAuditsByDate(auditFilter),
+        txtFilter: val,
+        isLoading: false
+      });
+    } catch (error) {
+      console.error("Error fetching audit data", error);
+      setState({
+        ...state,
+        audits: [],
+        auditsGroup: undefined,
+        txtFilter: val,
+        isLoading: false
+      });
     }
-
-
-    setState({
-      dataRegister: {
-        //eslint-disable-next-line
-        //@ts-ignore
-        id: props.context?.mode.contextInfo.entityId,
-        //eslint-disable-next-line
-        //@ts-ignore
-        entityLogicalName: props.context?.mode.contextInfo.entityTypeName
-      } as IDataRegister,
-      auditsDynamics: promiseAudit,
-      metadataAttributes: promiseMetadataAttributes as IAttributesMetadata[],
-      audits: auditFilter,
-      auditsGroup: helper.groupAuditsByDate(auditFilter),
-      txtFilter: val,
-      isLoading: false
-    });
   }
 
   const getDataRegister = (): IDataRegister => {

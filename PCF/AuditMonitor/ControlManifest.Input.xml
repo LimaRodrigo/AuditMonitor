@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="pcfs.audit" constructor="AuditMonitor" version="1.0.0" display-name-key="AuditMonitor" description-key="AuditMonitor description" control-type="virtual" >
+  <control namespace="pcfs.audit" constructor="AuditMonitor" version="1.0.1" display-name-key="AuditMonitor" description-key="AuditMonitor description" control-type="virtual" >
     <external-service-usage enabled="false">
     </external-service-usage>
     <property name="name" display-name-key="name_Key" description-key="Primary name column" of-type="SingleLine.Text" usage="bound" required="true" />
