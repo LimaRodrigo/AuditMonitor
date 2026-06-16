@@ -44,27 +44,34 @@ export class HelperXrm implements IHelperXrm {
                 }).catch((e) => reject(e));
         });
     }
-    ConvertAuditDynamicsToAudit(auditDynamics: IAuditDetails, metadataAttributes?: IAttributesMetadata[]): IAudit {
+    ConvertAuditDynamicsToAudit(auditDynamics: IAuditDetails | undefined, metadataAttributes?: IAttributesMetadata[]): IAudit | undefined {
+        if (!auditDynamics?.AuditRecord) {
+            console.warn("Invalid audit detail returned by Dataverse", auditDynamics);
+            return undefined;
+        }
+
         const dataAttributes: IDataAttributes[] = [];
         const propsAuditDynamics = Object.keys(auditDynamics);
-        const propsOld = propsAuditDynamics.includes("OldValue") ? Object.keys(auditDynamics.OldValue!) : [];
-        const propsNew = propsAuditDynamics.includes("NewValue") ? Object.keys(auditDynamics.NewValue!) : [];
+        const oldValue = auditDynamics.OldValue;
+        const newValue = auditDynamics.NewValue;
+        const propsOld = propsAuditDynamics.includes("OldValue") && oldValue ? Object.keys(oldValue) : [];
+        const propsNew = propsAuditDynamics.includes("NewValue") && newValue ? Object.keys(newValue) : [];
 
         metadataAttributes?.forEach((meta) => {
             if (propsNew.includes(meta.logicalName)) {
                 dataAttributes.push({
                     logicalName: meta.logicalName,
                     displayName: meta.displayName,
-                    oldValue: propsOld.includes(meta.logicalName) ? this.getFormatedValue(propsOld, auditDynamics.OldValue, meta.logicalName) : "",
-                    newValue: propsNew.includes(meta.logicalName) ? this.getFormatedValue(propsNew, auditDynamics.NewValue, meta.logicalName)  : ""
+                    oldValue: propsOld.includes(meta.logicalName) ? this.getFormatedValue(propsOld, oldValue, meta.logicalName) : "",
+                    newValue: propsNew.includes(meta.logicalName) ? this.getFormatedValue(propsNew, newValue, meta.logicalName)  : ""
                 });
             }
             else if (propsNew.includes(`_${meta.logicalName}_value`)) {
                 dataAttributes.push({
                     logicalName: meta.logicalName,
                     displayName: meta.displayName,
-                    oldValue: propsOld.includes(`_${meta.logicalName}_value`) ? auditDynamics.OldValue![`_${meta.logicalName}_value@OData.Community.Display.V1.FormattedValue`] : "",
-                    newValue: propsNew.includes(`_${meta.logicalName}_value`) ? auditDynamics.NewValue![`_${meta.logicalName}_value@OData.Community.Display.V1.FormattedValue`] : ""
+                    oldValue: propsOld.includes(`_${meta.logicalName}_value`) ? oldValue?.[`_${meta.logicalName}_value@OData.Community.Display.V1.FormattedValue`] : "",
+                    newValue: propsNew.includes(`_${meta.logicalName}_value`) ? newValue?.[`_${meta.logicalName}_value@OData.Community.Display.V1.FormattedValue`] : ""
                 });
             }
         });
